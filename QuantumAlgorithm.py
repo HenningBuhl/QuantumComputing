@@ -7,7 +7,8 @@ import matplotlib.pyplot as plt
 
 
 class QuantumAlgorithm:
-    def __init__(self, args):
+    def __init__(self, name, args):
+        self.name = name
         self.args = args
         self.circuit = self.get_circuit()
         self.backend = self.get_backend()
