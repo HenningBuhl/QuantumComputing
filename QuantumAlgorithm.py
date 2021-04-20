@@ -14,10 +14,10 @@ class QuantumAlgorithm:
         self.backend = self.get_backend()
         self.result = None
 
-    def get_backend(self,):
+    def get_backend(self):
         if self.args.location == "local":
             # Run locally.
-            backend = q.Aer.get_backend(self.args.sim_backend)
+            backend = q.Aer.get_backend(self.args.local_backend)
         else:
             # Run on backend.
             IBMQ.save_account(open("token.txt", "r").read())
@@ -32,9 +32,6 @@ class QuantumAlgorithm:
             backend = ""
         return backend
 
-    def get_circuit(self):
-        return None
-
     def run(self):
         job = q.execute(self.circuit, backend=self.backend, shots=self.args.shots)
         job_monitor(job)
@@ -42,6 +39,5 @@ class QuantumAlgorithm:
         self.result = result
         return result
 
-    def lol(self):
-        self.circuit.draw(output="mpl")
-
+    def save_results(self, file_path):
+        pass  # TODO
