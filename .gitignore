@@ -151,3 +151,6 @@ fabric.properties
 
 # IBMQ token file
 token.txt
+
+# Generated images
+imgs/
