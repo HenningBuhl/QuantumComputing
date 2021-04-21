@@ -154,3 +154,6 @@ token.txt
 
 # Generated images
 imgs/
+
+# Results of saved runs
+reuslts/
