@@ -4,6 +4,8 @@ from qiskit import IBMQ
 from qiskit.tools.monitor import job_monitor
 from qiskit.visualization import plot_histogram
 import matplotlib.pyplot as plt
+import json
+import os
 
 
 class QuantumAlgorithm:
@@ -39,5 +41,13 @@ class QuantumAlgorithm:
         self.result = result
         return result
 
-    def save_results(self, file_path):
-        pass  # TODO
+    def save_results(self):
+        jsonStr = json.dumps(self.result.data())
+        print(jsonStr)
+        base_path = 'results/'
+        if not os.path.exists(base_path):
+            os.mkdir(base_path)
+        text_file = open(base_path + self.name + '.txt', 'w')
+        text_file.write(jsonStr)
+        text_file.close()
+
