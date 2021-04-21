@@ -16,6 +16,10 @@ class QuantumAlgorithm:
         self.backend = self.get_backend()
         self.result = None
 
+
+    def get_circuit(self):
+        pass
+
     def get_backend(self):
         if self.args.location == "local":
             # Run locally.

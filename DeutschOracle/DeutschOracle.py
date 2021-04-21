@@ -6,10 +6,57 @@ class DeutschOracle(QuantumAlgorithm):
     def __init__(self, args):
         super().__init__("Deutsch Oracle", args)
 
-
     def get_circuit(self):
-        circuit = q.QuantumCircuit(2, 2)
-        circuit.h(0)
-        circuit.cx(0, 1)
-        circuit.measure([0, 1], [0, 1])
+        n = self.args.deutsch_jozsa_n
+        circuit = q.QuantumCircuit(n+1, n)
+
+        # Apply H-gates
+        for qubit in range(n):
+            circuit.h(qubit)
+
+        # Put qubit in state |->
+        circuit.x(n)
+        circuit.h(n)
+
+        # Add oracle
+        circuit += self.get_balanced_oracle();
+
+        # Repeat H-gates
+        for qubit in range(n):
+            circuit.h(qubit)
+        circuit.barrier()
+
+        # Measure
+        for i in range(n):
+            circuit.measure(i, i)
+
         return circuit
+
+    def get_constant_oracle(self):
+        pass
+
+    def get_balanced_oracle(self):
+        n = self.args.deutsch_jozsa_n
+        balanced_oracle = q.QuantumCircuit(n+1)
+        b_str = "101"
+
+        # Place X-gates
+        for qubit in range(len(b_str)):
+            if b_str[qubit] == '1':
+                balanced_oracle.x(qubit)
+
+        # Use barrier as divider
+        balanced_oracle.barrier()
+
+        # Controlled-NOT gates
+        for qubit in range(n):
+            balanced_oracle.cx(qubit, n)
+
+        balanced_oracle.barrier()
+
+        # Place X-gates
+        for qubit in range(len(b_str)):
+            if b_str[qubit] == '1':
+                balanced_oracle.x(qubit)
+        
+        return balanced_oracle
