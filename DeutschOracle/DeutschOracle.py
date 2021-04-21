@@ -19,11 +19,17 @@ class DeutschOracle(QuantumAlgorithm):
         circuit.x(n)
         circuit.h(n)
 
+        # Use barrier as divider
+        circuit.barrier()
+
         # Add oracle
         if self.args.deutsch_jozsa_oracle == 'balanced':
             circuit += self.get_balanced_oracle();
         else:
             circuit += self.get_constant_oracle();
+
+        # Use barrier as divider
+        circuit.barrier()
 
         # Repeat H-gates
         for qubit in range(n):
@@ -47,21 +53,17 @@ class DeutschOracle(QuantumAlgorithm):
     def get_balanced_oracle(self):
         n = self.args.deutsch_jozsa_n
         balanced_oracle = q.QuantumCircuit(n+1)
-        b_str = "101"
+        b = np.random.randint(1,2**n)
+        b_str = format(b, '0'+str(n)+'b')
 
         # Place X-gates
         for qubit in range(len(b_str)):
             if b_str[qubit] == '1':
                 balanced_oracle.x(qubit)
 
-        # Use barrier as divider
-        balanced_oracle.barrier()
-
         # Controlled-NOT gates
         for qubit in range(n):
             balanced_oracle.cx(qubit, n)
-
-        balanced_oracle.barrier()
 
         # Place X-gates
         for qubit in range(len(b_str)):
