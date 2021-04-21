@@ -1,5 +1,6 @@
 from QuantumAlgorithm import QuantumAlgorithm
 import qiskit as q
+import numpy as np
 
 
 class DeutschOracle(QuantumAlgorithm):
@@ -19,7 +20,10 @@ class DeutschOracle(QuantumAlgorithm):
         circuit.h(n)
 
         # Add oracle
-        circuit += self.get_balanced_oracle();
+        if self.args.deutsch_jozsa_oracle == 'balanced':
+            circuit += self.get_balanced_oracle();
+        else:
+            circuit += self.get_constant_oracle();
 
         # Repeat H-gates
         for qubit in range(n):
@@ -33,7 +37,12 @@ class DeutschOracle(QuantumAlgorithm):
         return circuit
 
     def get_constant_oracle(self):
-        pass
+        n = self.args.deutsch_jozsa_n
+        constant_oracle = q.QuantumCircuit(n+1)
+        output = np.random.randint(2)
+        if output == 1:
+            constant_oracle.x(n)
+        return constant_oracle
 
     def get_balanced_oracle(self):
         n = self.args.deutsch_jozsa_n
