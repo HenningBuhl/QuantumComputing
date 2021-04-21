@@ -1,10 +1,10 @@
 from unittest import TestCase
 
-from DeutschOracle.DeutschOracle import DeutschOracle
+from DeutschJozsa.DeutschJozsa import DeutschJozsa
 from utils import dotdict
 
 
-class TestDeutschOracle(TestCase):
+class TestDeutschJozsa(TestCase):
     def setUp(self):
         args = dotdict()
         args.location = "local"  # local or remote
@@ -16,12 +16,12 @@ class TestDeutschOracle(TestCase):
 
     def test_balanced(self):
         self.args.deutsch_jozsa_oracle = 'balanced'
-        alg = DeutschOracle(self.args)
+        alg = DeutschJozsa(self.args)
         results = alg.run()
         self.assertEqual(results.get_counts(alg.circuit)['1' * self.args.deutsch_jozsa_n], self.args.shots)
 
     def test_constant(self):
         self.args.deutsch_jozsa_oracle = 'constant'
-        alg = DeutschOracle(self.args)
+        alg = DeutschJozsa(self.args)
         results = alg.run()
         self.assertEqual(results.get_counts(alg.circuit)['0' * self.args.deutsch_jozsa_n], self.args.shots)

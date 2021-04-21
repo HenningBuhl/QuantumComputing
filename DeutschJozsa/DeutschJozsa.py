@@ -3,7 +3,7 @@ import qiskit as q
 import numpy as np
 
 
-class DeutschOracle(QuantumAlgorithm):
+class DeutschJozsa(QuantumAlgorithm):
     def __init__(self, args):
         super().__init__("Deutsch Oracle", args)
 
