@@ -9,7 +9,7 @@ class DeutschJozsa(QuantumAlgorithm):
 
     def get_circuit(self):
         n = self.args.deutsch_jozsa_n
-        circuit = q.QuantumCircuit(n+1, n)
+        circuit = q.QuantumCircuit(n + 1, n)
 
         # Apply H-gates
         for qubit in range(n):
@@ -44,7 +44,7 @@ class DeutschJozsa(QuantumAlgorithm):
 
     def get_constant_oracle(self):
         n = self.args.deutsch_jozsa_n
-        constant_oracle = q.QuantumCircuit(n+1)
+        constant_oracle = q.QuantumCircuit(n + 1)
         output = np.random.randint(2)
         if output == 1:
             constant_oracle.x(n)
@@ -52,9 +52,9 @@ class DeutschJozsa(QuantumAlgorithm):
 
     def get_balanced_oracle(self):
         n = self.args.deutsch_jozsa_n
-        balanced_oracle = q.QuantumCircuit(n+1)
-        b = np.random.randint(1,2**n)
-        b_str = format(b, '0'+str(n)+'b')
+        balanced_oracle = q.QuantumCircuit(n + 1)
+        b = np.random.randint(1, 2 ** n)
+        b_str = format(b, '0' + str(n) + 'b')
 
         # Place X-gates
         for qubit in range(len(b_str)):
@@ -69,5 +69,5 @@ class DeutschJozsa(QuantumAlgorithm):
         for qubit in range(len(b_str)):
             if b_str[qubit] == '1':
                 balanced_oracle.x(qubit)
-        
+
         return balanced_oracle
