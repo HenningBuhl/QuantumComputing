@@ -6,7 +6,7 @@ import numpy as np
 
 class DeutschJozsa(QuantumAlgorithm):
     def __init__(self, args):
-        super().__init__("Deutsch Oracle", args)
+        super().__init__("Deutsch Jozsa", args)
 
     def get_circuit(self):
         n = self.args.deutsch_jozsa_n
