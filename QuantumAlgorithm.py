@@ -6,6 +6,7 @@ from qiskit.visualization import plot_histogram
 import matplotlib.pyplot as plt
 import json
 import os
+import time
 
 
 class QuantumAlgorithm:
@@ -15,7 +16,6 @@ class QuantumAlgorithm:
         self.circuit = self.get_circuit()
         self.backend = self.get_backend()
         self.result = None
-
 
     def get_circuit(self):
         pass
@@ -51,7 +51,7 @@ class QuantumAlgorithm:
         base_path = 'results/'
         if not os.path.exists(base_path):
             os.mkdir(base_path)
-        text_file = open(base_path + self.name + '.txt', 'w')
+        time_stamp = time.strftime("%Y.%m.%d-%H.%M.%S")
+        text_file = open(base_path + self.name + '_' + time_stamp + '.txt', 'w')
         text_file.write(jsonStr)
         text_file.close()
-
