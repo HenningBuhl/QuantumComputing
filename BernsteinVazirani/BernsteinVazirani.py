@@ -25,12 +25,10 @@ class BernsteinVazirani(QuantumAlgorithm):
         circuit.barrier()
 
         # Apply the inner-product oracle
-        s = s[::-1]  # reverse s to fit qiskit's qubit ordering
-        for _q in range(n):
-            if s[_q] == '0':
-                circuit.i(_q)
-            else:
-                circuit.cx(_q, n)
+        oracle = self.get_oracle(s)
+        oracle = oracle.to_gate()
+        oracle.name = 'oracle'
+        circuit.append(oracle, range(n+1), [])
 
         # Apply barrier
         circuit.barrier()
@@ -44,3 +42,14 @@ class BernsteinVazirani(QuantumAlgorithm):
             circuit.measure(i, i)
 
         return circuit
+
+    def get_oracle(self, s):
+        n = len(s)
+        qc = q.QuantumCircuit(n +1)
+        s = s[::-1]  # reverse s to fit qiskit's qubit ordering
+        for _q in range(n):
+            if s[_q] == '0':
+                qc.i(_q)
+            else:
+                qc.cx(_q, n)
+        return qc

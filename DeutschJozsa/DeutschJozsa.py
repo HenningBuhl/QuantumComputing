@@ -1,5 +1,6 @@
 from QuantumAlgorithm import QuantumAlgorithm
 import qiskit as q
+from qiskit.converters import circuit_to_gate
 import numpy as np
 
 
@@ -24,9 +25,15 @@ class DeutschJozsa(QuantumAlgorithm):
 
         # Add oracle
         if self.args.deutsch_jozsa_oracle == 'balanced':
-            circuit += self.get_balanced_oracle();
+            oracle = self.get_balanced_oracle()
+            oracle = oracle.to_gate()
+            oracle.name = 'oracle'
+            circuit.append(oracle, range(n+1), [])
         else:
-            circuit += self.get_constant_oracle();
+            oracle = self.get_constant_oracle()
+            oracle = oracle.to_gate()
+            oracle.name = 'oracle'
+            circuit.append(oracle, range(n+1), [])
 
         # Use barrier as divider
         circuit.barrier()
@@ -34,7 +41,6 @@ class DeutschJozsa(QuantumAlgorithm):
         # Repeat H-gates
         for qubit in range(n):
             circuit.h(qubit)
-        circuit.barrier()
 
         # Measure
         for i in range(n):
@@ -48,6 +54,7 @@ class DeutschJozsa(QuantumAlgorithm):
         output = np.random.randint(2)
         if output == 1:
             constant_oracle.x(n)
+        
         return constant_oracle
 
     def get_balanced_oracle(self):

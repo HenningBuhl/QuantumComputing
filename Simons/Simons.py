@@ -22,7 +22,11 @@ class Simons(QuantumAlgorithm):
         # Apply barrier for visual separation
         circuit.barrier()
 
-        circuit += self.get_simon_oracle(b)
+        # Oracle.
+        oracle = self.get_oracle(b)
+        oracle = oracle.to_gate()
+        oracle.name = 'oracle'
+        circuit.append(oracle, range(n*2), [])
 
         # Apply barrier for visual separation
         circuit.barrier()
@@ -35,7 +39,7 @@ class Simons(QuantumAlgorithm):
 
         return circuit
 
-    def get_simon_oracle(self, b):
+    def get_oracle(self, b):
         b = b[::-1]  # reverse b for easy iteration
         n = len(b)
         qc = QuantumCircuit(n * 2)
