@@ -55,3 +55,13 @@ class QuantumAlgorithm:
         text_file = open(base_path + self.name + '_' + time_stamp + '.txt', 'w')
         text_file.write(jsonStr)
         text_file.close()
+
+    def run_experiments(self):
+        base_path = 'results/'
+        if not os.path.exists(base_path):
+            os.mkdir(base_path)
+        # TODO Perform on local sim and save svg of result
+        backend_local = q.Aer.get_backend(self.args.local_backend)
+
+        # TODO Perform on remote real QC and save svg of result
+        backend_remote = q.providers.ibmq.least_busy()
