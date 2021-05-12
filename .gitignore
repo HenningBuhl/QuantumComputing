@@ -157,3 +157,6 @@ imgs/
 
 # Results of saved runs
 results/
+
+# Data
+MNIST/
