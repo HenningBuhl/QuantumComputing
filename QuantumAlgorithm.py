@@ -8,6 +8,13 @@ import json
 import os
 import time
 
+# Imports
+from qiskit import IBMQ, Aer, assemble
+from qiskit.tools.monitor import job_monitor
+from qiskit.providers.ibmq import least_busy
+import qiskit as q
+import os
+
 
 class QuantumAlgorithm:
     def __init__(self, name, args):
@@ -56,12 +63,24 @@ class QuantumAlgorithm:
         text_file.write(jsonStr)
         text_file.close()
 
+    def save_result_img(self, path, result):
+        plot_histogram(result.get_counts()).savefig(path + '.pdf')
+
     def run_experiments(self):
         base_path = 'results/'
         if not os.path.exists(base_path):
             os.mkdir(base_path)
-        # TODO Perform on local sim and save svg of result
-        backend_local = q.Aer.get_backend(self.args.local_backend)
+        self.backend = q.Aer.get_backend(self.args.local_backend)
+        result = self.run()
+        self.save_result_img(base_path + self.name + '_local', result)
 
-        # TODO Perform on remote real QC and save svg of result
-        backend_remote = q.providers.ibmq.least_busy()
+        # run on remote
+
+        IBMQ.save_account(open("token.txt", "r").read())
+        factory = IBMQ.load_account()
+        devices = factory.backends(filters=lambda x: x.configuration().n_qubits >= 3 and
+                                                     not x.configuration().simulator)
+        self.backend = least_busy(devices)
+        result = self.run()
+        self.save_result_img(base_path + self.name + '_remote', result)
+
